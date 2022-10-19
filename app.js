@@ -24,6 +24,19 @@ const projectName = "basic-auth";
 
 app.locals.appTitle = `${capitalize(projectName)} created with IronLauncher`;
 
+// aqui ejecutaremos el middleware de variables locales para CADA ruta que intente acceder el cliente
+app.use((req, res, next) => {
+  // el middle crea una variable para HBS que nos ayuda a saber si el usuario esta logeado o no
+  if (req.session.activeUser === undefined) {
+    // el usuario no está activo
+    res.locals.isUserActive = false
+  } else {
+    // el usuario si está activo
+    res.locals.isUserActive = true
+  }
+  next()
+})
+
 // 👇 Start handling routes here
 const indexRoutes = require("./routes/index.routes");
 app.use("/", indexRoutes);
