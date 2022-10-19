@@ -127,14 +127,30 @@ router.post("/login", async (req, res, next) => {
     // nos da el id del usuario activo para funcionalidades
     // nos ayuda a tener enlaces especificos si el usuario esta logeado o no
 
-    // 4. redireccionar a una pagina privada
-    res.redirect("/profile")
+    // express-session crea la sesión y envia el cookie (copia de la sesión)
+    // connect-mongo se usa para guardar la sesion activa en la DB
+
+    // ahora que esta configurado, en este punto vamos a crear una sesion activa de este usuario
+
+    req.session.activeUser = foundUser; // ESTA ES LA LINEA CREA CREA LA SESSION/COOKIE
+
+    // el metodo es para asegurar que la sesion se ha creado correctamente antes de continuar
+    req.session.save(() => {
+      // 4. redireccionar a una pagina privada
+      res.redirect("/profile")
+    })
 
   } catch (error) {
     next(error)
   }
+})
 
+// GET "/auth/logout" => cerrar la sesión (destruirla)
+router.get("/logout", (req, res, next) => {
 
+  req.session.destroy(() => {
+    res.redirect("/")
+  })
 
 })
 
