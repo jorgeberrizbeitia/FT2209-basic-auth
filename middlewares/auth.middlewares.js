@@ -22,6 +22,10 @@ const isAdmin = (req, res, next) => {
   }
 }
 
+const isPatata = () => {
+  console.log("haciendo pruebas")
+}
+
 
 module.exports = {
   isLoggedIn,
